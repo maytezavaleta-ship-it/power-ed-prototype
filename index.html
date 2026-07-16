@@ -150,15 +150,14 @@
   /* ── LEFT: CONVERSATION PANEL ── */
   .conv-panel {
     order: 1;
+    flex: 0 0 50%;
     width: 50%;
-    min-width: 50%;
-    max-width: 50%;
-    flex-shrink: 0;
     border-right: 1px solid var(--border);
     background: var(--white);
     display: flex; flex-direction: column;
     height: 100%;
     box-shadow: 2px 0 12px rgba(26,31,94,0.06);
+    overflow: hidden;
   }
 
   .conv-header {
@@ -333,8 +332,8 @@
   /* ── RIGHT: ARTICLE CONTENT ── */
   .article-pane {
     order: 2;
-    flex: 1;
-    min-width: 0;
+    flex: 0 0 50%;
+    width: 50%;
     overflow-y: auto;
     padding: 32px 40px;
     height: 100%;
