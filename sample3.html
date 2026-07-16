@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acme Support Center</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a1f5e;
+    --navy-light: #2d3580;
+    --lavender-bg: #f0eef8;
+    --lavender-mid: #e8e4f5;
+    --lavender-dark: #c5bce8;
+    --accent: #5b5bd6;
+    --accent-hover: #4a4ac4;
+    --white: #ffffff;
+    --text-body: #374151;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --ai-bg: #f4f2fc;
+    --chip-bg: #f5f3ff;
+    --chip-border: #c4b5fd;
+    --chip-text: #4c1d95;
+    --shadow: 0 2px 10px rgba(26,31,94,0.08);
+    --shadow-lg: 0 8px 30px rgba(26,31,94,0.13);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(160deg, var(--lavender-bg) 0%, #f9f8fe 35%, var(--white) 100%);
+    min-height: 100vh;
+    color: var(--text-body);
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 1px 6px rgba(26,31,94,0.06);
+  }
+  .logo {
+    font-size: 16px; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; text-decoration: none;
+  }
+  .logo-icon {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, var(--accent), var(--navy));
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 14px; font-weight: 800;
+  }
+  .header-nav { display: flex; gap: 24px; }
+  .header-nav a {
+    text-decoration: none; color: var(--text-muted);
+    font-size: 13.5px; font-weight: 500; transition: color 0.15s;
+  }
+  .header-nav a:hover { color: var(--navy); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .guest-badge {
+    font-size: 12px; color: var(--text-muted);
+    background: var(--lavender-bg); padding: 4px 11px;
+    border-radius: 20px; border: 1px solid var(--lavender-dark);
+  }
+  .btn-signin {
+    font-size: 12.5px; font-weight: 600; color: var(--accent);
+    background: none; border: 1.5px solid var(--accent);
+    border-radius: 7px; padding: 5px 14px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-signin:hover { background: var(--accent); color: white; }
+
+  /* ─── VIEWS ─── */
+  #view-home    { display: block; }
+  #view-article { display: none; }
+
+  /* ══════════════════════════════════
+     HOME VIEW
+  ══════════════════════════════════ */
+  .hero {
+    padding: 48px 28px 32px; max-width: 820px; margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 28px; font-weight: 800; color: var(--navy);
+    line-height: 1.2; margin-bottom: 10px;
+  }
+  .hero p { font-size: 14.5px; color: var(--text-muted); margin-bottom: 24px; max-width: 480px; }
+  .search-bar {
+    display: flex; align-items: center;
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 11px; padding: 10px 15px;
+    max-width: 500px; gap: 9px; box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus-within { border-color: var(--accent); }
+  .search-bar input {
+    border: none; outline: none; flex: 1;
+    font-size: 14px; color: var(--text-body); background: transparent;
+  }
+  .search-bar input::placeholder { color: var(--text-muted); }
+
+  .home-section { max-width: 820px; margin: 0 auto; padding: 0 28px 48px; }
+  .section-label {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.9px; margin-bottom: 14px;
+  }
+  .article-list { display: flex; flex-direction: column; gap: 10px; }
+  .article-row {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 13px; padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: all 0.18s; box-shadow: var(--shadow); gap: 14px;
+  }
+  .article-row:hover {
+    border-color: var(--lavender-dark); box-shadow: var(--shadow-lg); transform: translateY(-1px);
+  }
+  .article-row-left { flex: 1; }
+  .article-row-cat {
+    font-size: 10.5px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px;
+  }
+  .article-row-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .article-row-excerpt { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+  .article-row-arrow {
+    color: var(--lavender-dark); font-size: 20px; flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .article-row:hover .article-row-arrow { color: var(--accent); transform: translateX(3px); }
+
+  /* ══════════════════════════════════════════════════════
+     ARTICLE DETAIL — LEFT/RIGHT SPLIT
+  ══════════════════════════════════════════════════════ */
+  .detail-shell {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+
+  /* ── LEFT: CONVERSATION PANEL ── */
+  .conv-panel {
+    order: 1;
+    flex: 0 0 50%;
+    width: 50%;
+    border-right: 1px solid var(--border);
+    background: var(--white);
+    display: flex; flex-direction: column;
+    height: 100%;
+    box-shadow: 2px 0 12px rgba(26,31,94,0.06);
+    overflow: hidden;
+  }
+
+  .conv-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 11px;
+    flex-shrink: 0;
+  }
+  .conv-agent-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.25);
+  }
+  .conv-agent-name { font-size: 14px; font-weight: 700; color: white; line-height: 1.2; }
+  .conv-agent-status {
+    font-size: 11px; color: rgba(255,255,255,0.7);
+    display: flex; align-items: center; gap: 4px; margin-top: 2px;
+  }
+  .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; }
+
+  /* Context pill showing current article */
+  .conv-context-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 11px; color: rgba(255,255,255,0.85);
+    display: flex; align-items: center; gap: 5px;
+    margin-left: auto; flex-shrink: 0; max-width: 160px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .conv-messages {
+    flex: 1; overflow-y: auto; padding: 18px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+
+  /* AI proactive message */
+  .msg-ai { display: flex; gap: 9px; align-items: flex-start; }
+  .msg-ai-av {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; margin-top: 2px;
+  }
+  .msg-ai-inner { flex: 1; max-width: calc(100% - 37px); }
+  .msg-ai-bubble {
+    background: var(--ai-bg);
+    border: 1px solid var(--lavender-dark);
+    padding: 11px 14px; border-radius: 4px 14px 14px 14px;
+    font-size: 13.5px; line-height: 1.6; color: var(--text-body);
+  }
+  .msg-ai-bubble p + p { margin-top: 8px; }
+  .msg-ai-bubble strong { font-weight: 600; color: var(--navy); }
+  .msg-ai-bubble .cite {
+    display: inline-block; background: var(--accent); color: white;
+    font-size: 9px; font-weight: 800; width: 15px; height: 15px;
+    border-radius: 3px; text-align: center; line-height: 15px;
+    margin-left: 2px; vertical-align: middle;
+  }
+  .msg-footer {
+    font-size: 11px; color: var(--text-muted); margin-top: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .helpful-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 11px; padding: 2px 7px;
+    border-radius: 5px; cursor: pointer; transition: all 0.15s;
+  }
+  .helpful-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* USER BUBBLE */
+  .msg-user {
+    display: flex; justify-content: flex-end; align-items: flex-end; gap: 7px;
+  }
+  .msg-user-bubble {
+    background: var(--accent); color: white;
+    padding: 10px 14px; border-radius: 16px 16px 4px 16px;
+    font-size: 13.5px; line-height: 1.5; max-width: 88%;
+  }
+  .msg-user-av {
+    width: 24px; height: 24px; background: var(--lavender-mid);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; flex-shrink: 0; color: var(--text-muted);
+  }
+
+  /* INLINE CHIP CARD — appears inside the conversation thread */
+  .chip-card {
+    background: var(--white);
+    border: 1.5px solid var(--lavender-dark);
+    border-radius: 14px; padding: 14px;
+    box-shadow: var(--shadow);
+    display: inline-block;
+    width: auto;
+  }
+  .chip-card-label {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .pulse-dot {
+    width: 6px; height: 6px; background: var(--accent);
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .chip-stack { display: flex; flex-direction: column; gap: 7px; }
+  .conv-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--chip-bg); border: 1px solid var(--chip-border);
+    color: var(--chip-text); font-size: 13px; font-weight: 500;
+    padding: 10px 13px; border-radius: 9px; cursor: pointer;
+    transition: all 0.15s; text-align: left; width: 100%;
+  }
+  .conv-chip:hover {
+    background: #ede9fe; border-color: #a78bfa;
+    box-shadow: 0 2px 8px rgba(91,91,214,0.12); transform: translateX(2px);
+  }
+  .conv-chip-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* FOLLOW-UP CHIPS after a response */
+  .follow-up-chips { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .follow-up-chip {
+    background: var(--lavender-bg); border: 1px solid var(--lavender-dark);
+    color: var(--navy); font-size: 12.5px; padding: 7px 12px;
+    border-radius: 8px; cursor: pointer; transition: all 0.15s;
+    text-align: left; width: 100%;
+  }
+  .follow-up-chip:hover { background: var(--lavender-mid); border-color: var(--accent); }
+
+  /* TYPING INDICATOR */
+  .typing-row { display: flex; gap: 9px; align-items: center; }
+  .typing-bubble {
+    background: var(--ai-bg); border: 1px solid var(--lavender-dark);
+    padding: 10px 14px; border-radius: 4px 14px 14px 14px;
+    display: flex; gap: 4px; align-items: center;
+  }
+  .typing-dot {
+    width: 6px; height: 6px; background: var(--text-muted);
+    border-radius: 50%; animation: tdot 1.2s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes tdot {
+    0%,60%,100%{ transform:translateY(0); opacity:.35 }
+    30%{ transform:translateY(-4px); opacity:1 }
+  }
+
+  /* CONV INPUT BAR */
+  .conv-input-area {
+    border-top: 1px solid var(--border);
+    padding: 12px 16px; background: var(--white); flex-shrink: 0;
+  }
+  .conv-input-row { display: flex; align-items: center; gap: 8px; }
+  .conv-input {
+    flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 9px 13px; font-size: 13.5px; outline: none; font-family: inherit;
+    transition: border-color 0.2s; color: var(--text-body); background: var(--lavender-bg);
+  }
+  .conv-input:focus { border-color: var(--accent); background: var(--white); }
+  .conv-input::placeholder { color: var(--text-muted); }
+  .conv-send {
+    width: 38px; height: 38px; background: var(--accent); border: none;
+    color: white; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; transition: background 0.15s; flex-shrink: 0;
+  }
+  .conv-send:hover { background: var(--accent-hover); }
+  .conv-disclaimer {
+    font-size: 10.5px; color: var(--text-muted); text-align: center; margin-top: 7px;
+  }
+  .conv-disclaimer a { color: var(--accent); }
+
+  /* ── RIGHT: ARTICLE CONTENT ── */
+  .article-pane {
+    order: 2;
+    flex: 0 0 50%;
+    width: 50%;
+    overflow-y: auto;
+    padding: 32px 40px;
+    height: 100%;
+  }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumb-link {
+    color: var(--accent); cursor: pointer; font-weight: 500; transition: color 0.15s;
+  }
+  .breadcrumb-link:hover { color: var(--accent-hover); }
+  .breadcrumb-sep { color: var(--border); }
+
+  .article-cat-tag {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    color: var(--accent); background: #ede9fe;
+    padding: 3px 10px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+  }
+  .article-h1 {
+    font-size: 24px; font-weight: 800; color: var(--navy);
+    line-height: 1.2; margin-bottom: 10px;
+  }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 12px; color: var(--text-muted); margin-bottom: 24px;
+  }
+  .article-meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .article-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .article-body { font-size: 14.5px; line-height: 1.75; color: var(--text-body); max-width: 680px; }
+  .article-body h2 {
+    font-size: 16px; font-weight: 700; color: var(--navy); margin: 26px 0 9px;
+  }
+  .article-body h2:first-child { margin-top: 0; }
+  .article-body p { margin-bottom: 13px; }
+  .article-body ol, .article-body ul { padding-left: 20px; margin-bottom: 13px; }
+  .article-body li { margin-bottom: 5px; }
+  .article-body strong { font-weight: 600; color: var(--navy); }
+  .article-body .note {
+    background: var(--ai-bg); border-left: 3px solid var(--accent);
+    padding: 11px 15px; border-radius: 0 8px 8px 0; font-size: 13.5px; margin: 14px 0;
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    header { padding: 0 14px; }
+    .header-nav { display: none; }
+    .hero { padding: 24px 14px 20px; }
+    .home-section { padding: 0 14px 36px; }
+    .detail-shell { flex-direction: column; height: auto; overflow: visible; }
+    .conv-panel { width: 100%; min-width: 0; max-width: 100%; height: 520px; border-right: none; border-bottom: 1px solid var(--border); }
+    .article-pane { height: auto; padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" onclick="showHome()" href="#">
+    <div class="logo-icon">A</div>
+    Acme Support
+  </a>
+  <nav class="header-nav">
+    <a href="#">Browse Topics</a>
+    <a href="#">My Cases</a>
+    <a href="#">Community</a>
+  </nav>
+  <div class="header-right">
+    <span class="guest-badge">👤 Guest</span>
+    <button class="btn-signin">Sign In</button>
+  </div>
+</header>
+
+<!-- ══════════════ HOME VIEW ══════════════ -->
+<div id="view-home">
+  <div class="hero">
+    <p class="hero-eyebrow">Acme Support Center</p>
+    <h1>How can we help you today?</h1>
+    <p>Search our knowledge base or select an article to get instant AI-powered answers.</p>
+    <div class="search-bar">
+      <span style="color:var(--text-muted)">🔍</span>
+      <input type="text" placeholder="Search for an answer…" />
+    </div>
+  </div>
+
+  <div class="home-section">
+    <div class="section-label">Popular Articles</div>
+    <div class="article-list">
+
+      <div class="article-row" onclick="showArticle('password')">
+        <div class="article-row-left">
+          <div class="article-row-cat">Account &amp; Security</div>
+          <div class="article-row-title">Resetting Your Password and Account Access</div>
+          <div class="article-row-excerpt">Reset your password, unlock your account, set up 2FA, and manage access for team members.</div>
+        </div>
+        <div class="article-row-arrow">›</div>
+      </div>
+
+      <div class="article-row" onclick="showArticle('billing')">
+        <div class="article-row-left">
+          <div class="article-row-cat">Billing</div>
+          <div class="article-row-title">Understanding Your Billing, Invoices, and Plan Options</div>
+          <div class="article-row-excerpt">Invoices, plan upgrades, proration, adding seats, and disputing a charge.</div>
+        </div>
+        <div class="article-row-arrow">›</div>
+      </div>
+
+      <div class="article-row" onclick="showArticle('started')">
+        <div class="article-row-left">
+          <div class="article-row-cat">Getting Started</div>
+          <div class="article-row-title">Getting Started: Your First 30 Minutes with Acme</div>
+          <div class="article-row-excerpt">Complete your setup, connect your tools, invite your team, and run your first workflow.</div>
+        </div>
+        <div class="article-row-arrow">›</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ARTICLE DETAIL VIEW ══════════════ -->
+<div id="view-article">
+  <div class="detail-shell">
+
+    <!-- ── LEFT: CONVERSATION ── -->
+    <div class="conv-panel">
+
+      <div class="conv-header">
+        <div class="conv-agent-avatar">🤖</div>
+        <div>
+          <div class="conv-agent-name">Aria, your Acme AI</div>
+          <div class="conv-agent-status">
+            <div class="status-dot"></div>
+            Online · powered by Agentforce
+          </div>
+        </div>
+        <div class="conv-context-pill" id="context-pill">
+          📄 <span id="context-pill-text"></span>
+        </div>
+      </div>
+
+      <div class="conv-messages" id="conv-messages">
+        <!-- populated by JS on article open -->
+      </div>
+
+      <div class="conv-input-area">
+        <div class="conv-input-row">
+          <input class="conv-input" id="conv-input"
+            placeholder="Ask something else…"
+            onkeydown="handleKey(event)" />
+          <button class="conv-send" onclick="sendMessage()">➤</button>
+        </div>
+        <div class="conv-disclaimer">AI may make mistakes. For urgent issues, <a href="#">contact support</a>.</div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: ARTICLE ── -->
+    <div class="article-pane">
+      <nav class="breadcrumb">
+        <span class="breadcrumb-link" onclick="showHome()">Support Home</span>
+        <span class="breadcrumb-sep">›</span>
+        <span id="breadcrumb-cat"></span>
+        <span class="breadcrumb-sep">›</span>
+        <span id="breadcrumb-title" style="color:var(--text-body)"></span>
+      </nav>
+      <div class="article-cat-tag" id="detail-cat"></div>
+      <h1 class="article-h1" id="detail-title"></h1>
+      <div class="article-meta-row">
+        <span id="detail-updated"></span>
+        <div class="article-meta-dot"></div>
+        <span>5 min read</span>
+        <div class="article-meta-dot"></div>
+        <span id="detail-views"></span>
+      </div>
+      <hr class="article-divider">
+      <div class="article-body" id="detail-body"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ─── CONTENT ──────────────────────────────────────────────────────────────
+
+  const ARTICLES = {
+    password: {
+      cat: 'Account & Security',
+      title: 'Resetting Your Password and Account Access',
+      updated: 'Updated July 12, 2026',
+      views: '14,203 views',
+      greeting: 'Hi! I noticed you\'re reading about <strong>password resets and account access</strong>. I can help — what are you trying to do?',
+      chips: [
+        { icon: '🔒', label: 'Why is my account locked?',       key: 'locked'   },
+        { icon: '🛡️', label: 'How do I set up 2FA?',            key: '2fa'      },
+        { icon: '👥', label: 'Reset a password for a teammate', key: 'teammate' },
+      ],
+      body: `
+        <h2>How to Reset Your Password</h2>
+        <p>If you've forgotten your password or need to change it, resetting it takes just a couple of minutes.</p>
+        <ol>
+          <li>Go to the <strong>Sign In</strong> page and click <em>"Forgot password?"</em></li>
+          <li>Enter the email address on your account.</li>
+          <li>Check your inbox for a reset link — arrives within 2 minutes. Check spam if you don't see it.</li>
+          <li>Click the link, set a new password (min. 8 characters, one number), and you're signed in automatically.</li>
+        </ol>
+        <div class="note">⏱ Reset links expire after 60 minutes. Request a new one from the Sign In page if yours has expired.</div>
+        <h2>Account Lockout</h2>
+        <p>Acme locks your account after <strong>5 consecutive failed sign-in attempts</strong>. Even a correct password won't work while locked. Follow the password reset steps above — it also clears the lockout.</p>
+        <p>If you see a different error message, your account may have been locked by an admin. Contact your workspace admin in that case.</p>
+        <h2>Two-Factor Authentication (2FA)</h2>
+        <p>2FA adds a second verification step and is strongly recommended for all users, especially admins.</p>
+        <ol>
+          <li>Go to <strong>Settings → Security → Two-Factor Authentication</strong>.</li>
+          <li>Choose <strong>Authenticator App</strong> (recommended over SMS).</li>
+          <li>Scan the QR code with Google Authenticator, Authy, or 1Password.</li>
+          <li>Enter the 6-digit code to confirm, then save your backup codes.</li>
+        </ol>
+        <div class="note">💡 Backup codes are shown only once — store them in a password manager.</div>
+        <h2>Resetting Passwords for Team Members</h2>
+        <p>Workspace <strong>Admins</strong> and <strong>User Managers</strong> can reset passwords for other members.</p>
+        <ol>
+          <li>Go to <strong>Settings → Team → Members</strong>.</li>
+          <li>Click the team member's name, then <em>"Reset password."</em></li>
+          <li>They receive a reset link by email, valid for 24 hours.</li>
+        </ol>
+      `
+    },
+    billing: {
+      cat: 'Billing',
+      title: 'Understanding Your Billing, Invoices, and Plan Options',
+      updated: 'Updated July 5, 2026',
+      views: '9,841 views',
+      greeting: 'Hi! I can help you understand your <strong>billing, invoices, or plan options</strong>. What do you want to look into?',
+      chips: [
+        { icon: '💳', label: 'Why did my bill change this month?', key: 'charge'  },
+        { icon: '⬆️', label: 'How do I upgrade my plan?',          key: 'upgrade' },
+        { icon: '➕', label: 'How do I add seats for my team?',    key: 'seats'   },
+      ],
+      body: `
+        <h2>How Billing Works</h2>
+        <p>Acme bills on a monthly or annual cycle from your subscription date. Invoices are generated and charged automatically each cycle.</p>
+        <p>View invoices at <strong>Settings → Billing → Invoices</strong>.</p>
+        <h2>Invoice Breakdown</h2>
+        <ul>
+          <li><strong>Base plan</strong> — your monthly or annual fee.</li>
+          <li><strong>Per-seat charges</strong> — each active seat listed if your plan is seat-based.</li>
+          <li><strong>Prorated charges</strong> — upgrades or seat additions mid-cycle; you pay only remaining days.</li>
+          <li><strong>Usage charges</strong> — overages on features with a quota.</li>
+        </ul>
+        <div class="note">💡 Click any invoice line item to see a full description.</div>
+        <h2>Upgrading Your Plan</h2>
+        <p>Changes take effect immediately with no data loss.</p>
+        <ol>
+          <li><strong>Settings → Billing → Plan → "Change plan"</strong></li>
+          <li>Review options and confirm. Remaining days are prorated.</li>
+        </ol>
+        <p>Downgrades take effect at cycle end. Features above your new plan's limit are locked, not deleted.</p>
+        <h2>Adding or Removing Seats</h2>
+        <p>Seats are billed when an invitation is accepted, prorated to end of cycle. To add: <strong>Settings → Team → Members → "Invite members."</strong></p>
+        <h2>Disputes and Refunds</h2>
+        <p>Click <strong>"Dispute this charge"</strong> on any invoice. Billing team reviews within 2 business days; refunds take 5–10 business days.</p>
+      `
+    },
+    started: {
+      cat: 'Getting Started',
+      title: 'Getting Started: Your First 30 Minutes with Acme',
+      updated: 'Updated June 28, 2026',
+      views: '22,567 views',
+      greeting: 'Hi! Setting up Acme for the first time? I\'ll help you get to value fast — what do you want to start with?',
+      chips: [
+        { icon: '🚀', label: 'What should I set up first?',         key: 'first'   },
+        { icon: '🔗', label: 'How do I connect my existing tools?', key: 'connect' },
+        { icon: '📨', label: 'How do I invite my team?',            key: 'invite'  },
+      ],
+      body: `
+        <h2>Before You Start</h2>
+        <p>This guide covers the highest-impact setup steps. Most users see value within their first session by completing at least steps 1–3.</p>
+        <div class="note">⏱ Full setup: ~20–30 minutes. Stop after step 2 and you'll still get day-one value.</div>
+        <h2>Step 1: Complete Your Profile</h2>
+        <p>Go to <strong>Settings → Profile</strong> — fill in your name, role, and timezone. This personalizes Acme's content and notifications for you.</p>
+        <h2>Step 2: Connect Your Tools</h2>
+        <p>Acme integrates with 50+ tools. Connect the ones your team already uses.</p>
+        <ul>
+          <li><strong>Slack</strong> — notifications and actions from channels.</li>
+          <li><strong>Google Workspace</strong> — Drive files and Calendar events you choose to share.</li>
+          <li><strong>Salesforce</strong> — sync customer data (requires Salesforce admin approval).</li>
+        </ul>
+        <p>Go to <strong>Settings → Integrations</strong>. Most connections take under 2 minutes via OAuth.</p>
+        <h2>Step 3: Invite Your Team</h2>
+        <p>Invite at least 2–3 teammates to unlock collaboration features. <strong>Settings → Team → Members → "Invite members."</strong> Choose their role before sending.</p>
+        <h2>Step 4: Run Your First Workflow</h2>
+        <p>Go to <strong>Workflows → Templates</strong> and pick a template that matches work you already do manually. Popular first picks: <em>Weekly status digest</em>, <em>New customer onboarding</em>, <em>Support ticket triage</em>.</p>
+        <h2>Track Your Progress</h2>
+        <p>The <strong>Setup Checklist</strong> on your home dashboard tracks progress and disappears automatically when complete.</p>
+      `
+    }
+  };
+
+  const RESPONSES = {
+    password_locked: {
+      paras: [
+        '<strong>Your account is locked due to too many failed sign-in attempts.</strong> Acme locks after 5 consecutive failures.',
+        'Fix: go to <strong>Sign In → "Forgot password?"</strong>, enter your email, and click the reset link you receive. This both resets your password <em>and</em> clears the lockout in one step. <span class="cite">1</span>',
+        'If a different error appeared, your admin may have locked it manually — contact your workspace admin in that case.'
+      ],
+      followUps: ['What if I didn\'t get the reset email?', 'How do I prevent future lockouts?', 'My backup email is also wrong']
+    },
+    password_2fa: {
+      paras: [
+        '<strong>Setting up 2FA takes about 2 minutes.</strong>',
+        'Go to <strong>Settings → Security → Two-Factor Authentication</strong>, choose <em>Authenticator App</em>, scan the QR code with Google Authenticator or Authy, enter the 6-digit code to confirm, then save your backup codes. <span class="cite">1</span>',
+        '⚠️ Backup codes are shown once only — store them in a password manager.'
+      ],
+      followUps: ['What if I lose my authenticator device?', 'Can I use a hardware security key?', 'Is 2FA required for my account?']
+    },
+    password_teammate: {
+      paras: [
+        '<strong>Only Admins and User Managers can reset passwords for team members.</strong>',
+        'If you have the right role: <strong>Settings → Team → Members</strong> → click the member\'s name → click <em>"Reset password."</em> They get a link by email, valid for 24 hours. <span class="cite">1</span>',
+        'Not an admin? Ask your workspace admin — or point your teammate to the <em>"Forgot password?"</em> self-service flow.'
+      ],
+      followUps: ['How do I check what role I have?', 'Can I see when a teammate last signed in?', 'How do I remove a team member?']
+    },
+    billing_charge: {
+      paras: [
+        '<strong>Bill increases are almost always from: a plan upgrade, new seats added, or usage overages.</strong>',
+        'To find out exactly: <strong>Settings → Billing → Invoices</strong> → open the latest invoice → look at <em>Charges breakdown</em>. <em>"Prorated"</em> = mid-cycle change. <em>"Usage charges"</em> = quota exceeded. <span class="cite">1</span>',
+        'If it still looks wrong, click <strong>"Dispute this charge"</strong> on the invoice — reviewed within 2 business days.'
+      ],
+      followUps: ['How do I set a monthly spending cap?', 'Can I get a refund for unused time?', 'When is my next invoice due?']
+    },
+    billing_upgrade: {
+      paras: [
+        '<strong>You can upgrade at any time — effective immediately, no data loss.</strong>',
+        '<strong>Settings → Billing → Plan → "Change plan"</strong> → compare → confirm. Remaining days on the current cycle are prorated so you only pay the difference. <span class="cite">2</span>',
+        'The <strong>Business plan</strong> is most popular for teams over 10 — includes SSO, advanced analytics, and priority support.'
+      ],
+      followUps: ['What\'s included in Business vs. Growth?', 'Can I trial Business features?', 'How much does annual billing save?']
+    },
+    billing_seats: {
+      paras: [
+        '<strong>Seats are billed when an invitation is accepted, prorated to end of your billing cycle.</strong>',
+        '<strong>Settings → Team → Members → "Invite members"</strong> → enter emails → assign roles → send. <span class="cite">1</span>',
+        'You can pre-purchase seats in <strong>Billing → Plan</strong> to reserve capacity. Unused pre-purchased seats carry over.'
+      ],
+      followUps: ['How do I remove a seat?', 'What roles can I assign?', 'Can I set a max seat limit?']
+    },
+    started_first: {
+      paras: [
+        '<strong>Fastest path to value: connect tools → invite team → run a template workflow.</strong>',
+        '<strong>1.</strong> <strong>Settings → Integrations</strong> — connect your tools (5 min).<br><strong>2.</strong> <strong>Settings → Team</strong> — invite 2–3 teammates (2 min).<br><strong>3.</strong> <strong>Workflows → Templates</strong> — pick one that matches work you already do (10 min). <span class="cite">1</span>',
+        'Track your progress in the <strong>Setup Checklist</strong> on your home dashboard.'
+      ],
+      followUps: ['Where are the workflow templates?', 'Which integrations should I connect first?', 'How long does full setup take?']
+    },
+    started_connect: {
+      paras: [
+        '<strong>Acme connects to 50+ tools.</strong> Here are the top three to set up first:',
+        '<strong>Slack:</strong> Settings → Integrations → Slack → Connect → authorize.<br><strong>Google Workspace:</strong> Settings → Integrations → Google → sign in with Google.<br><strong>Salesforce:</strong> Settings → Integrations → Salesforce → org URL + OAuth (requires Salesforce admin approval). <span class="cite">2</span>',
+        'All integrations require the <strong>Admin role</strong>. If the option isn\'t there, ask your workspace admin.'
+      ],
+      followUps: ['What data does each integration access?', 'Can I connect multiple Slack workspaces?', 'How do I disconnect an integration?']
+    },
+    started_invite: {
+      paras: [
+        '<strong>Invitations go by email and expire after 7 days.</strong>',
+        '<strong>Settings → Team → Members → "Invite members"</strong> → enter emails → choose role:<br>• <strong>Admin</strong> — full access including billing and settings<br>• <strong>Member</strong> — all features, no settings access<br>• <strong>Viewer</strong> — read-only <span class="cite">1</span>',
+        'Roles can be changed anytime. Removing a member immediately revokes access and frees their seat.'
+      ],
+      followUps: ['How do I resend an expired invitation?', 'Can I import users in bulk?', 'Difference between Admin and Member?']
+    }
+  };
+
+  // ─── STATE ────────────────────────────────────────────────────────────────
+
+  let currentArticle = null;
+
+  // ─── VIEW MANAGEMENT ─────────────────────────────────────────────────────
+
+  function showHome() {
+    document.getElementById('view-home').style.display = 'block';
+    document.getElementById('view-article').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentArticle = null;
+  }
+
+  function showArticle(key) {
+    const a = ARTICLES[key];
+    if (!a) return;
+    currentArticle = key;
+
+    // Article pane
+    document.getElementById('breadcrumb-cat').textContent = a.cat;
+    document.getElementById('breadcrumb-title').textContent = a.title;
+    document.getElementById('detail-cat').textContent = a.cat;
+    document.getElementById('detail-title').textContent = a.title;
+    document.getElementById('detail-updated').textContent = a.updated;
+    document.getElementById('detail-views').textContent = a.views;
+    document.getElementById('detail-body').innerHTML = a.body;
+
+    // Context pill (truncate long titles)
+    const short = a.title.length > 28 ? a.title.slice(0, 26) + '…' : a.title;
+    document.getElementById('context-pill-text').textContent = short;
+
+    // Reset conversation
+    const msgs = document.getElementById('conv-messages');
+    msgs.innerHTML = '';
+    document.getElementById('conv-input').value = '';
+
+    // Proactive AI greeting + inline chip card
+    appendAIGreetingWithChips(a, msgs);
+
+    // Switch views
+    document.getElementById('view-home').style.display = 'none';
+    document.getElementById('view-article').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ─── PROACTIVE GREETING + CHIP CARD ──────────────────────────────────────
+
+  function appendAIGreetingWithChips(a, container) {
+    const time = now();
+
+    // Greeting bubble
+    const greet = document.createElement('div');
+    greet.className = 'msg-ai';
+    greet.innerHTML = `
+      <div class="msg-ai-av">🤖</div>
+      <div class="msg-ai-inner">
+        <div class="msg-ai-bubble"><p>${a.greeting}</p></div>
+        <div class="msg-footer"><span>Aria · ${time}</span></div>
+      </div>`;
+    container.appendChild(greet);
+
+    // Chip card (inline, part of thread)
+    const card = document.createElement('div');
+    card.className = 'msg-ai';
+    card.id = 'chip-card-row';
+    const chipsHtml = a.chips.map(c =>
+      `<button class="conv-chip" onclick="clickChip('${key(a)}','${c.key}','${esc(c.label)}')">
+         <span class="conv-chip-icon">${c.icon}</span>${c.label}
+       </button>`
+    ).join('');
+    card.innerHTML = `
+      <div class="msg-ai-av" style="opacity:0;pointer-events:none"></div>
+      <div class="msg-ai-inner" style="flex:0 1 auto;width:auto;max-width:75%;">
+        <div class="chip-card">
+          <div class="chip-card-label"><div class="pulse-dot"></div> What can I help with?</div>
+          <div class="chip-stack">${chipsHtml}</div>
+        </div>
+      </div>`;
+    container.appendChild(card);
+    scrollBottom();
+  }
+
+  // ─── CHIP INTERACTION ────────────────────────────────────────────────────
+
+  function clickChip(articleKey, nudgeKey, label) {
+    // Remove chip card from thread
+    const cardRow = document.getElementById('chip-card-row');
+    if (cardRow) cardRow.remove();
+    deliver(articleKey + '_' + nudgeKey, label);
+  }
+
+  // ─── SEND MESSAGE ─────────────────────────────────────────────────────────
+
+  function sendMessage() {
+    const input = document.getElementById('conv-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    // Remove chips if still present
+    const cardRow = document.getElementById('chip-card-row');
+    if (cardRow) cardRow.remove();
+    deliver(currentArticle + '_freeform', text);
+  }
+
+  function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
+
+  function freeform(text) {
+    deliver(currentArticle + '_freeform', text);
+  }
+
+  // ─── CONVERSATION ENGINE ─────────────────────────────────────────────────
+
+  function deliver(responseKey, question) {
+    const container = document.getElementById('conv-messages');
+    appendUser(question, container);
+    const typing = appendTyping(container);
+    scrollBottom();
+
+    const data = RESPONSES[responseKey];
+    setTimeout(() => {
+      typing.remove();
+      if (data) {
+        appendAI(data.paras, data.followUps, container);
+      } else {
+        appendAI([
+          `Looking into <strong>"${question}"</strong> for you…`,
+          'Based on this article, you\'ll find the right setting at <strong>Settings → ' + sectionHint() + '</strong>. Want me to walk through the steps?'
+        ], ['Show me the steps', 'Connect me to support', 'I found my answer'], container);
+      }
+      scrollBottom();
+    }, 1500);
+  }
+
+  function appendUser(text, container) {
+    const el = document.createElement('div');
+    el.className = 'msg-user';
+    el.innerHTML = `<div class="msg-user-bubble">${text}</div><div class="msg-user-av">👤</div>`;
+    container.appendChild(el);
+  }
+
+  function appendTyping(container) {
+    const el = document.createElement('div');
+    el.className = 'typing-row';
+    el.innerHTML = `<div class="msg-ai-av">🤖</div>
+      <div class="typing-bubble">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>`;
+    container.appendChild(el);
+    return el;
+  }
+
+  function appendAI(paras, followUps, container) {
+    const t = now();
+    const fups = (followUps && followUps.length)
+      ? `<div class="follow-up-chips">${followUps.map(f =>
+          `<button class="follow-up-chip" onclick="freeform('${esc(f)}')">${f}</button>`
+        ).join('')}</div>` : '';
+    const el = document.createElement('div');
+    el.className = 'msg-ai';
+    el.innerHTML = `
+      <div class="msg-ai-av">🤖</div>
+      <div class="msg-ai-inner">
+        <div class="msg-ai-bubble">${paras.map(p => `<p>${p}</p>`).join('')}</div>
+        <div class="msg-footer">
+          <span>Aria · ${t}</span>
+          <button class="helpful-btn">👍</button>
+          <button class="helpful-btn">👎</button>
+        </div>
+        ${fups}
+      </div>`;
+    container.appendChild(el);
+  }
+
+  // ─── HELPERS ─────────────────────────────────────────────────────────────
+
+  function scrollBottom() {
+    const c = document.getElementById('conv-messages');
+    setTimeout(() => { c.scrollTop = c.scrollHeight; }, 60);
+  }
+
+  function now() {
+    return new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function sectionHint() {
+    return { password: 'Security', billing: 'Billing', started: 'Integrations' }[currentArticle] || 'Settings';
+  }
+
+  // helper to get the article key from the article object
+  function key(a) {
+    return Object.keys(ARTICLES).find(k => ARTICLES[k] === a) || currentArticle;
+  }
+
+  function esc(s) {
+    return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>
