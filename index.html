@@ -251,7 +251,8 @@
     border: 1.5px solid var(--lavender-dark);
     border-radius: 14px; padding: 14px;
     box-shadow: var(--shadow);
-    max-width: 280px;
+    display: inline-block;
+    width: auto;
   }
   .chip-card-label {
     font-size: 11px; font-weight: 700; color: var(--text-muted);
@@ -784,7 +785,7 @@
     ).join('');
     card.innerHTML = `
       <div class="msg-ai-av" style="opacity:0;pointer-events:none"></div>
-      <div class="msg-ai-inner">
+      <div class="msg-ai-inner" style="flex:0 1 auto;width:auto;max-width:75%;">
         <div class="chip-card">
           <div class="chip-card-label"><div class="pulse-dot"></div> What can I help with?</div>
           <div class="chip-stack">${chipsHtml}</div>
