@@ -77,7 +77,7 @@
 
   /* ─── VIEWS ─── */
   #view-home    { display: block; }
-  #view-article { display: none; width: 100%; }
+  #view-article { display: none; }
 
   /* ══════════════════════════════════
      HOME VIEW
@@ -149,6 +149,7 @@
 
   /* ── LEFT: CONVERSATION PANEL ── */
   .conv-panel {
+    order: 1;
     width: 400px;
     min-width: 400px;
     max-width: 400px;
@@ -158,8 +159,6 @@
     display: flex; flex-direction: column;
     height: 100%;
     box-shadow: 2px 0 12px rgba(26,31,94,0.06);
-    position: relative;
-    z-index: 1;
   }
 
   .conv-header {
@@ -333,6 +332,7 @@
 
   /* ── RIGHT: ARTICLE CONTENT ── */
   .article-pane {
+    order: 2;
     flex: 1;
     min-width: 0;
     overflow-y: auto;
@@ -753,7 +753,7 @@
 
     // Switch views
     document.getElementById('view-home').style.display = 'none';
-    document.getElementById('view-article').style.display = 'flex';
+    document.getElementById('view-article').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
