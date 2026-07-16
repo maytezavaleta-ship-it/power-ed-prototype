@@ -134,7 +134,7 @@
   /* Article content area — shrinks right when panel is open */
   .article-scroll-area {
     transition: margin-right 0.35s cubic-bezier(0.4,0,0.2,1);
-    padding: 28px 32px 200px; /* bottom padding leaves room above minimized bar */
+    padding: 28px 32px 80px;
   }
   .article-scroll-area.panel-open {
     margin-right: 420px;
@@ -201,12 +201,13 @@
   }
   .ai-minimized.hidden { opacity: 0; pointer-events: none; }
 
-  /* Nudge pills row above the bar */
+  /* Nudge pills row under article title */
   .nudge-pills {
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    margin-bottom: 20px;
   }
   .nudge-pill {
     display: flex; align-items: center; gap: 6px;
@@ -497,6 +498,8 @@
         <span id="detail-views"></span>
       </div>
       <hr class="article-divider">
+      <!-- Nudge pills injected here by showArticle() -->
+      <div class="nudge-pills" id="nudge-pills"></div>
       <div class="article-body" id="detail-body"></div>
     </div>
   </div>
@@ -506,10 +509,6 @@
 
     <!-- MINIMIZED STATE -->
     <div class="ai-minimized" id="ai-minimized">
-      <!-- Nudge pills -->
-      <div class="nudge-pills" id="nudge-pills">
-        <!-- injected per article -->
-      </div>
       <!-- Collapsed bar -->
       <div class="ai-bar" onclick="expandPanel(null, null)">
         <div class="ai-bar-avatar">🤖</div>
