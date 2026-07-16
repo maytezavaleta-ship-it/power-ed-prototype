@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acme Support Center</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a1f5e;
+    --navy-light: #2d3580;
+    --lavender-bg: #f0eef8;
+    --lavender-mid: #e8e4f5;
+    --lavender-dark: #c5bce8;
+    --accent: #5b5bd6;
+    --accent-hover: #4a4ac4;
+    --chip-bg: #ececec;
+    --chip-hover: #ddd;
+    --white: #ffffff;
+    --text-body: #374151;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --nudge-bg: #f5f3ff;
+    --nudge-border: #c4b5fd;
+    --nudge-text: #4c1d95;
+    --ai-bubble: #f9f7ff;
+    --success: #059669;
+    --shadow: 0 2px 12px rgba(26,31,94,0.10);
+    --shadow-lg: 0 8px 32px rgba(26,31,94,0.18);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(160deg, var(--lavender-bg) 0%, #f9f8fe 40%, var(--white) 100%);
+    min-height: 100vh;
+    color: var(--text-body);
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(26,31,94,0.07);
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--navy));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+  }
+  .header-nav {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+  .header-nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .header-nav a:hover { color: var(--navy); }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .guest-badge {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--lavender-bg);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--lavender-dark);
+  }
+  .btn-signin {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: none;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-signin:hover { background: var(--accent); color: white; }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 52px 32px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    max-width: 560px;
+  }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    max-width: 560px;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus-within { border-color: var(--accent); }
+  .search-bar input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 15px;
+    color: var(--text-body);
+    background: transparent;
+  }
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .search-icon { color: var(--text-muted); font-size: 16px; }
+
+  /* ─── NUDGE EXPLAINER BANNER ─── */
+  .nudge-banner {
+    max-width: 900px;
+    margin: 0 auto 8px;
+    padding: 0 32px;
+  }
+  .nudge-banner-inner {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1px solid var(--nudge-border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nudge-banner-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .nudge-banner-text {
+    font-size: 13px;
+    color: var(--nudge-text);
+    line-height: 1.5;
+  }
+  .nudge-banner-text strong { font-weight: 600; }
+
+  /* ─── SECTION ─── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 32px 40px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 16px;
+  }
+
+  /* ─── ARTICLE CARD ─── */
+  .article-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .article-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .article-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--lavender-dark);
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .article-category {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: #ede9fe;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .article-updated {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .article-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .article-title:hover { color: var(--accent); }
+  .article-excerpt {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* ─── NUDGE CHIPS ─── */
+  .nudge-section {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+  .nudge-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .nudge-label-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .nudge-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nudge-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--nudge-bg);
+    border: 1px solid var(--nudge-border);
+    color: var(--nudge-text);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nudge-chip:hover {
+    background: #ede9fe;
+    border-color: #a78bfa;
+    box-shadow: 0 2px 8px rgba(91,91,214,0.15);
+    transform: translateY(-1px);
+  }
+  .nudge-chip-icon { font-size: 14px; }
+
+  /* ─── CHAT PANEL ─── */
+  .chat-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,31,94,0.25);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .chat-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .chat-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 100vw;
+    background: var(--white);
+    box-shadow: -8px 0 40px rgba(26,31,94,0.18);
+    display: flex;
+    flex-direction: column;
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .chat-panel.open { transform: translateX(0); }
+
+  .chat-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    padding: 20px 20px 16px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .chat-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .chat-agent-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .chat-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .chat-agent-name {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .chat-agent-status {
+    font-size: 11px;
+    opacity: 0.75;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: #34d399;
+    border-radius: 50%;
+  }
+  .chat-close {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .chat-close:hover { background: rgba(255,255,255,0.25); }
+
+  .context-banner {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .context-banner-label { opacity: 0.75; }
+  .context-banner-article { font-weight: 600; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .msg-user {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .msg-user-bubble {
+    background: var(--accent);
+    color: white;
+    padding: 11px 16px;
+    border-radius: 18px 18px 4px 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 85%;
+  }
+  .msg-user-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--chip-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+
+  .msg-ai {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .msg-ai-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .msg-ai-content { flex: 1; }
+  .msg-ai-bubble {
+    background: var(--ai-bubble);
+    border: 1px solid var(--lavender-dark);
+    padding: 14px 16px;
+    border-radius: 4px 18px 18px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-body);
+  }
+  .msg-ai-bubble p + p { margin-top: 10px; }
+  .msg-ai-bubble strong { color: var(--navy); font-weight: 600; }
+  .msg-ai-bubble .cite {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 18px;
+    margin-left: 2px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .msg-footer {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    padding-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .msg-helpful {
+    display: flex;
+    gap: 6px;
+  }
+  .helpful-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .helpful-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .chat-suggestions {
+    padding: 0 20px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chat-suggestion-chip {
+    background: var(--lavender-bg);
+    border: 1px solid var(--lavender-dark);
+    color: var(--navy);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chat-suggestion-chip:hover { background: var(--lavender-mid); border-color: var(--accent); }
+
+  .chat-input-area {
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    flex-shrink: 0;
+    background: var(--white);
+  }
+  .chat-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .chat-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-send {
+    background: var(--accent);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .chat-send:hover { background: var(--accent-hover); }
+  .chat-disclaimer {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ─── TYPING INDICATOR ─── */
+  .typing-indicator {
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .typing-indicator.visible { display: flex; }
+  .typing-dots {
+    background: var(--ai-bubble);
+    border: 1px solid var(--lavender-dark);
+    padding: 12px 16px;
+    border-radius: 4px 18px 18px 18px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .typing-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing 1.2s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    header { padding: 0 16px; }
+    .header-nav { display: none; }
+    .hero { padding: 32px 16px 24px; }
+    .hero h1 { font-size: 24px; }
+    .section { padding: 12px 16px 32px; }
+    .nudge-banner { padding: 0 16px; }
+    .chat-panel { width: 100vw; }
+    .article-card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">A</div>
+    Acme Support
+  </div>
+  <nav class="header-nav">
+    <a href="#">Browse Topics</a>
+    <a href="#">My Cases</a>
+    <a href="#">Community</a>
+  </nav>
+  <div class="header-right">
+    <span class="guest-badge">👤 Guest</span>
+    <button class="btn-signin">Sign In</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Acme Support Center</p>
+  <h1>How can we help you today?</h1>
+  <p>Search our knowledge base or browse topics below. Our AI assistant is ready to help.</p>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="Search for an answer..." />
+  </div>
+</div>
+
+<!-- NUDGE EXPLAINER BANNER -->
+<div class="nudge-banner">
+  <div class="nudge-banner-inner">
+    <div class="nudge-banner-icon">✨</div>
+    <div class="nudge-banner-text">
+      <strong>AI-powered nudges are on.</strong>
+      The purple chips below each article are personalized questions our AI thinks you might ask — click any chip to get an instant, contextualized answer without starting from scratch.
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLES -->
+<div class="section">
+  <div class="section-title">Popular Articles</div>
+  <div class="article-grid">
+
+    <!-- Article 1: Password & Account Access -->
+    <div class="article-card">
+      <div class="article-meta">
+        <span class="article-category">Account &amp; Security</span>
+        <span class="article-updated">Updated 3 days ago</span>
+      </div>
+      <div class="article-title" onclick="openArticle('password')">Resetting Your Password and Account Access</div>
+      <div class="article-excerpt">Learn how to reset your password, unlock a locked account, recover access with a backup email, and set up two-factor authentication to keep your account secure.</div>
+      <div class="nudge-section">
+        <div class="nudge-label">
+          <div class="nudge-label-dot"></div>
+          Ask AI — suggested questions
+        </div>
+        <div class="nudge-chips">
+          <button class="nudge-chip" onclick="openChat('password', 'locked', 'Why is my account locked and how do I unlock it?')">
+            <span class="nudge-chip-icon">🔒</span> Why is my account locked?
+          </button>
+          <button class="nudge-chip" onclick="openChat('password', '2fa', 'How do I set up two-factor authentication?')">
+            <span class="nudge-chip-icon">🛡️</span> Set up 2FA while I&rsquo;m here
+          </button>
+          <button class="nudge-chip" onclick="openChat('password', 'teammate', 'Can I reset a password on behalf of a teammate?')">
+            <span class="nudge-chip-icon">👥</span> Reset for a team member
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article 2: Billing -->
+    <div class="article-card">
+      <div class="article-meta">
+        <span class="article-category">Billing</span>
+        <span class="article-updated">Updated 1 week ago</span>
+      </div>
+      <div class="article-title" onclick="openArticle('billing')">Understanding Your Billing, Invoices, and Plan Options</div>
+      <div class="article-excerpt">Find answers about your monthly invoice, upcoming charges, how plan upgrades are prorated, adding seats for your team, and cancellation policies.</div>
+      <div class="nudge-section">
+        <div class="nudge-label">
+          <div class="nudge-label-dot"></div>
+          Ask AI — suggested questions
+        </div>
+        <div class="nudge-chips">
+          <button class="nudge-chip" onclick="openChat('billing', 'charge', 'Why did my bill increase this month?')">
+            <span class="nudge-chip-icon">💳</span> Why did my bill change?
+          </button>
+          <button class="nudge-chip" onclick="openChat('billing', 'upgrade', 'How do I upgrade my plan and what are the pricing options?')">
+            <span class="nudge-chip-icon">⬆️</span> Upgrade my plan
+          </button>
+          <button class="nudge-chip" onclick="openChat('billing', 'seats', 'How do I add seats for my team and how are they billed?')">
+            <span class="nudge-chip-icon">➕</span> Add seats for my team
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article 3: Getting Started -->
+    <div class="article-card">
+      <div class="article-meta">
+        <span class="article-category">Getting Started</span>
+        <span class="article-updated">Updated 2 weeks ago</span>
+      </div>
+      <div class="article-title" onclick="openArticle('started')">Getting Started: Your First 30 Minutes with Acme</div>
+      <div class="article-excerpt">A step-by-step guide to completing your account setup, connecting your existing tools, inviting your team, and running your first workflow — from sign-up to your first result.</div>
+      <div class="nudge-section">
+        <div class="nudge-label">
+          <div class="nudge-label-dot"></div>
+          Ask AI — suggested questions
+        </div>
+        <div class="nudge-chips">
+          <button class="nudge-chip" onclick="openChat('started', 'first', 'What should I set up first to get value quickly?')">
+            <span class="nudge-chip-icon">🚀</span> What should I set up first?
+          </button>
+          <button class="nudge-chip" onclick="openChat('started', 'connect', 'How do I connect my existing tools like Slack, Google Workspace, or Salesforce?')">
+            <span class="nudge-chip-icon">🔗</span> Connect my existing tools
+          </button>
+          <button class="nudge-chip" onclick="openChat('started', 'invite', 'How do I invite my team members and set their permissions?')">
+            <span class="nudge-chip-icon">📨</span> Invite team members
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CHAT OVERLAY -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+
+<!-- CHAT PANEL -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-header-top">
+      <div class="chat-agent-info">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <div class="chat-agent-name">Acme AI Assistant</div>
+          <div class="chat-agent-status">
+            <div class="status-dot"></div>
+            Online · powered by Agentforce
+          </div>
+        </div>
+      </div>
+      <button class="chat-close" onclick="closeChat()">✕</button>
+    </div>
+    <div class="context-banner" id="contextBanner">
+      <span class="context-banner-label">📄 Context:</span>
+      <span class="context-banner-article" id="contextArticleLabel">—</span>
+    </div>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <!-- messages injected by JS -->
+  </div>
+
+  <div class="chat-suggestions" id="chatSuggestions">
+    <!-- follow-up chips injected by JS -->
+  </div>
+
+  <div class="chat-input-area">
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatInput" placeholder="Ask a follow-up question…" onkeydown="handleChatKey(event)" />
+      <button class="chat-send" onclick="sendFollowUp()">➤</button>
+    </div>
+    <div class="chat-disclaimer">AI responses may not be 100% accurate. For critical issues, contact support.</div>
+  </div>
+</div>
+
+<script>
+  // ─── DATA ────────────────────────────────────────────────────────────────
+
+  const ARTICLE_LABELS = {
+    password: 'Resetting Your Password and Account Access',
+    billing:  'Understanding Your Billing, Invoices, and Plan Options',
+    started:  'Getting Started: Your First 30 Minutes with Acme',
+  };
+
+  const NUDGE_RESPONSES = {
+    password_locked: {
+      question: 'Why is my account locked and how do I unlock it?',
+      answer: [
+        '<strong>Your account is most likely locked due to too many failed sign-in attempts.</strong> Acme locks accounts after 5 consecutive failed password attempts as a security measure.',
+        'To unlock your account:<br><br>1. Go to the <strong>Sign In</strong> page and click <em>"Forgot password?"</em><br>2. Enter your email address — you\'ll receive an unlock link within 2 minutes<br>3. Click the link and set a new password<br>4. If you don\'t receive the email, check your spam folder or try your backup email address',
+        'If your account was locked by an administrator (you\'ll see a different error message), you\'ll need to contact your org\'s IT admin directly. <span class="cite">1</span><span class="cite">2</span>'
+      ],
+      followUps: ['How do I set up 2FA to prevent this?', 'I didn\'t get the unlock email', 'My backup email is also wrong'],
+    },
+    password_2fa: {
+      question: 'How do I set up two-factor authentication?',
+      answer: [
+        '<strong>Setting up 2FA adds a second layer of protection to your account</strong> and is strongly recommended.',
+        'Steps to enable 2FA:<br><br>1. Go to <strong>Account Settings → Security</strong><br>2. Click <em>"Enable two-factor authentication"</em><br>3. Choose your method: <strong>Authenticator App</strong> (recommended) or SMS<br>4. For authenticator apps, scan the QR code with Google Authenticator, Authy, or 1Password<br>5. Enter the 6-digit code to confirm setup<br>6. Save your backup codes in a safe place — you\'ll need these if you lose your device <span class="cite">1</span>',
+        '⚠️ If your organization requires 2FA, you may already be enrolled. Check the Security tab to see your current status.'
+      ],
+      followUps: ['What if I lose my phone?', 'Can I use a hardware security key?', 'How do I remove 2FA if needed?'],
+    },
+    password_teammate: {
+      question: 'Can I reset a password on behalf of a teammate?',
+      answer: [
+        '<strong>Only users with the Admin or User Manager role can reset passwords for other team members.</strong>',
+        'If you have the right permissions:<br><br>1. Go to <strong>Settings → Team → Members</strong><br>2. Find the team member and click their name<br>3. Click <em>"Reset password"</em> — they\'ll receive an email with a secure reset link<br>4. The link expires in 24 hours<br><br>The team member will be prompted to set a new password on their next sign-in. <span class="cite">1</span>',
+        'If you\'re not an admin, ask your workspace admin to do this for you — or direct your teammate to use the self-service <em>"Forgot password?"</em> flow.'
+      ],
+      followUps: ['How do I make someone an admin?', 'Can I see my team\'s security status?', 'What roles are available?'],
+    },
+    billing_charge: {
+      question: 'Why did my bill increase this month?',
+      answer: [
+        '<strong>Bill changes are usually caused by one of three things:</strong> plan upgrades, new seats added, or overage charges on usage-based features.',
+        'To find out exactly what changed:<br><br>1. Go to <strong>Billing → Invoices</strong> and open your latest invoice<br>2. The <em>"Charges breakdown"</em> section shows each line item with a description<br>3. Look for rows marked <em>"Prorated"</em> — these indicate mid-cycle changes<br>4. <em>"Usage charges"</em> rows indicate you exceeded your plan\'s included quota <span class="cite">1</span><span class="cite">3</span>',
+        'If a charge looks incorrect, click <strong>"Dispute this charge"</strong> on the invoice page and our billing team will review it within 2 business days.'
+      ],
+      followUps: ['How do I set a spending limit?', 'Can I get a refund for unused time?', 'What is included in my plan?'],
+    },
+    billing_upgrade: {
+      question: 'How do I upgrade my plan and what are the pricing options?',
+      answer: [
+        '<strong>You can upgrade your plan at any time — changes take effect immediately and your next invoice will reflect the new pricing.</strong>',
+        'To upgrade:<br><br>1. Go to <strong>Billing → Plan</strong><br>2. Click <em>"Change plan"</em><br>3. Compare features across Starter, Growth, and Business plans<br>4. Select your new plan and confirm<br><br>The remaining days in your current billing cycle will be prorated — you\'ll only pay the difference for the unused days. <span class="cite">2</span>',
+        'Not sure which plan is right for you? The <strong>Business plan</strong> is most popular for teams over 10 people and includes SSO, advanced analytics, and priority support.'
+      ],
+      followUps: ['What is included in the Business plan?', 'Can I try Business plan features first?', 'How does annual billing work?'],
+    },
+    billing_seats: {
+      question: 'How do I add seats for my team and how are they billed?',
+      answer: [
+        '<strong>Adding seats gives additional team members access to your workspace.</strong> New seats are prorated to the end of your current billing cycle.',
+        'To add seats:<br><br>1. Go to <strong>Settings → Team → Members</strong><br>2. Click <em>"Invite members"</em><br>3. Enter email addresses (one per line) and assign roles<br>4. Click <em>"Send invitations"</em> — seats are added immediately upon acceptance<br><br>Billing impact: each seat is charged at your plan\'s per-seat rate, prorated from the day the invitation is accepted. <span class="cite">1</span>',
+        'You can pre-purchase seats in <strong>Billing → Plan</strong> if you\'d like to reserve capacity before inviting. Unused pre-purchased seats carry over to the next billing cycle.'
+      ],
+      followUps: ['How do I remove a seat?', 'Can I set seat limits?', 'What roles can I assign?'],
+    },
+    started_first: {
+      question: 'What should I set up first to get value quickly?',
+      answer: [
+        '<strong>Most new users see value fastest by completing these three steps in order:</strong>',
+        '<strong>1. Connect your data sources</strong> (5 min) — Go to <em>Settings → Integrations</em> and connect the tools your team already uses. Acme works best when it can see your existing context. <span class="cite">1</span><br><br><strong>2. Invite your team</strong> (2 min) — Go to <em>Settings → Team</em> and invite at least 2–3 teammates. Acme\'s collaboration features require more than one user to be useful.<br><br><strong>3. Run your first workflow</strong> (10 min) — Use one of the pre-built templates in the <em>Workflows</em> section to see a real result without having to build from scratch.',
+        'The entire onboarding takes about 20 minutes. You can track your progress in the <strong>Setup Checklist</strong> on your home dashboard.'
+      ],
+      followUps: ['What integrations are available?', 'Where are the workflow templates?', 'How do I track onboarding progress?'],
+    },
+    started_connect: {
+      question: 'How do I connect my existing tools like Slack, Google Workspace, or Salesforce?',
+      answer: [
+        '<strong>Acme connects to over 50 tools.</strong> Here\'s how to connect the most popular ones:',
+        '<strong>Slack:</strong> Settings → Integrations → Slack → <em>"Connect"</em> → authorize in the OAuth popup. Once connected, you can receive Acme notifications in Slack channels. <span class="cite">2</span><br><br><strong>Google Workspace:</strong> Settings → Integrations → Google → <em>"Connect"</em> → sign in with your Google account. This gives Acme read access to Drive files you share with it.<br><br><strong>Salesforce:</strong> Settings → Integrations → Salesforce → enter your org URL and follow the OAuth flow. Requires Salesforce admin approval.',
+        'All integrations require the <strong>Admin role</strong> to configure. If you don\'t see the option, ask your workspace admin.'
+      ],
+      followUps: ['What data does each integration access?', 'Can I connect multiple Slack workspaces?', 'How do I disconnect an integration?'],
+    },
+    started_invite: {
+      question: 'How do I invite my team members and set their permissions?',
+      answer: [
+        '<strong>You can invite team members directly from the Settings page.</strong> Invitations are sent via email and expire after 7 days.',
+        'To invite someone:<br><br>1. Go to <strong>Settings → Team → Members</strong><br>2. Click <em>"Invite members"</em><br>3. Enter their email address and choose a role:<br>&nbsp;&nbsp;&nbsp;• <strong>Admin</strong> — full access including billing and settings<br>&nbsp;&nbsp;&nbsp;• <strong>Member</strong> — can use all features but can\'t change settings<br>&nbsp;&nbsp;&nbsp;• <strong>Viewer</strong> — read-only access to shared content <span class="cite">1</span>',
+        'You can change a member\'s role at any time from the <em>Members</em> list. Removing a member immediately revokes their access and their seat becomes available for reuse.'
+      ],
+      followUps: ['What is the difference between Admin and Member?', 'How do I resend an expired invitation?', 'Can I import users in bulk?'],
+    },
+  };
+
+  // ─── STATE ────────────────────────────────────────────────────────────────
+
+  let currentArticle = null;
+  let currentNudge = null;
+  let chatOpen = false;
+
+  // ─── CHAT OPEN / CLOSE ────────────────────────────────────────────────────
+
+  function openChat(articleKey, nudgeKey, question) {
+    currentArticle = articleKey;
+    currentNudge = nudgeKey;
+    chatOpen = true;
+
+    // Set context banner
+    document.getElementById('contextArticleLabel').textContent = ARTICLE_LABELS[articleKey] || articleKey;
+
+    // Clear messages and render initial exchange
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+    renderTypingThenResponse(articleKey, nudgeKey, question, container);
+
+    // Open panel
+    document.getElementById('chatOverlay').classList.add('open');
+    document.getElementById('chatPanel').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeChat() {
+    chatOpen = false;
+    document.getElementById('chatOverlay').classList.remove('open');
+    document.getElementById('chatPanel').classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('chatSuggestions').innerHTML = '';
+  }
+
+  // ─── RENDER MESSAGES ─────────────────────────────────────────────────────
+
+  function renderUserMessage(text, container) {
+    const el = document.createElement('div');
+    el.className = 'msg-user';
+    el.innerHTML = `
+      <div class="msg-user-bubble">${text}</div>
+      <div class="msg-user-avatar">👤</div>
+    `;
+    container.appendChild(el);
+    scrollToBottom(container);
+  }
+
+  function renderTypingIndicator(container) {
+    const el = document.createElement('div');
+    el.className = 'msg-ai typing-indicator visible';
+    el.id = 'typingIndicator';
+    el.innerHTML = `
+      <div class="msg-ai-avatar">🤖</div>
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    `;
+    container.appendChild(el);
+    scrollToBottom(container);
+    return el;
+  }
+
+  function renderAIMessage(paragraphs, container, followUps) {
+    const el = document.createElement('div');
+    el.className = 'msg-ai';
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    el.innerHTML = `
+      <div class="msg-ai-avatar">🤖</div>
+      <div class="msg-ai-content">
+        <div class="msg-ai-bubble">${paragraphs.map(p => `<p>${p}</p>`).join('')}</div>
+        <div class="msg-footer">
+          <span>Acme AI · ${time}</span>
+          <div class="msg-helpful">
+            <button class="helpful-btn">👍 Helpful</button>
+            <button class="helpful-btn">👎 Not helpful</button>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+    scrollToBottom(container);
+
+    // Render follow-up chips
+    if (followUps && followUps.length) {
+      const suggestionsEl = document.getElementById('chatSuggestions');
+      suggestionsEl.innerHTML = followUps.map(f =>
+        `<button class="chat-suggestion-chip" onclick="sendFollowUpText('${escapeAttr(f)}')">${f}</button>`
+      ).join('');
+    }
+  }
+
+  function renderTypingThenResponse(articleKey, nudgeKey, question, container) {
+    renderUserMessage(question, container);
+    const typing = renderTypingIndicator(container);
+    const key = `${articleKey}_${nudgeKey}`;
+    const data = NUDGE_RESPONSES[key];
+    setTimeout(() => {
+      typing.remove();
+      if (data) {
+        renderAIMessage(data.answer, container, data.followUps);
+      } else {
+        renderAIMessage([
+          `I can help you with questions about <strong>${ARTICLE_LABELS[articleKey]}</strong>.`,
+          'What would you like to know?'
+        ], container, []);
+      }
+    }, 1400);
+  }
+
+  // ─── FOLLOW-UP ────────────────────────────────────────────────────────────
+
+  function sendFollowUp() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    document.getElementById('chatSuggestions').innerHTML = '';
+    sendFollowUpText(text);
+  }
+
+  function sendFollowUpText(text) {
+    const container = document.getElementById('chatMessages');
+    document.getElementById('chatSuggestions').innerHTML = '';
+    renderUserMessage(text, container);
+    const typing = renderTypingIndicator(container);
+    setTimeout(() => {
+      typing.remove();
+      renderAIMessage([
+        `I'm looking into that for you — <strong>${text}</strong>`,
+        'Based on your account context and the article you were reading, here\'s what I found: this is handled in <strong>Settings → ' + getSuggestedSection(currentArticle) + '</strong>. If you need to dig deeper, I can pull up specific steps or connect you to a support agent.',
+      ], container, ['Show me the steps', 'Connect me to support', 'I found my answer']);
+    }, 1600);
+  }
+
+  function handleChatKey(e) {
+    if (e.key === 'Enter') sendFollowUp();
+  }
+
+  // ─── HELPERS ─────────────────────────────────────────────────────────────
+
+  function scrollToBottom(container) {
+    setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+  }
+
+  function escapeAttr(str) {
+    return str.replace(/'/g, '\\\'').replace(/"/g, '&quot;');
+  }
+
+  function getSuggestedSection(articleKey) {
+    const map = { password: 'Security', billing: 'Billing', started: 'Integrations' };
+    return map[articleKey] || 'Settings';
+  }
+
+  function openArticle(key) {
+    // For prototype purposes, clicking an article title opens the first nudge
+    const nudgeMap = { password: 'locked', billing: 'charge', started: 'first' };
+    const questionMap = {
+      password: 'Why is my account locked and how do I unlock it?',
+      billing:  'Why did my bill increase this month?',
+      started:  'What should I set up first to get value quickly?',
+    };
+    openChat(key, nudgeMap[key], questionMap[key]);
+  }
+</script>
+</body>
+</html>
