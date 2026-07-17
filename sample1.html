@@ -524,7 +524,7 @@
   .helpful-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   .chat-suggestions {
-    padding: 0 20px 14px;
+    padding: 8px 0 0;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -788,15 +788,12 @@
     <!-- messages injected by JS -->
   </div>
 
-  <div class="chat-suggestions" id="chatSuggestions">
-    <!-- follow-up chips injected by JS -->
-  </div>
-
   <div class="chat-input-area">
     <div class="chat-input-row">
       <input class="chat-input" id="chatInput" placeholder="Ask a follow-up question…" onkeydown="handleChatKey(event)" />
       <button class="chat-send" onclick="sendFollowUp()">➤</button>
     </div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
     <div class="chat-disclaimer">AI responses may not be 100% accurate. For critical issues, contact support.</div>
   </div>
 </div>

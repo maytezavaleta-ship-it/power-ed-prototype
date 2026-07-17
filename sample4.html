@@ -348,15 +348,15 @@
     justify-content: center; font-size: 11px; flex-shrink: 0; color: var(--text-muted);
   }
 
-  /* FOLLOW-UP CHIPS */
-  .follow-up-chips { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  /* FOLLOW-UP CHIPS — rendered below prompt bar */
   .follow-up-chip {
     background: var(--lavender-bg); border: 1px solid var(--lavender-dark);
     color: var(--navy); font-size: 12.5px; padding: 7px 12px;
-    border-radius: 8px; cursor: pointer; transition: all 0.15s;
-    text-align: left; width: 100%;
+    border-radius: 20px; cursor: pointer; transition: all 0.15s;
+    white-space: nowrap;
   }
   .follow-up-chip:hover { background: var(--lavender-mid); border-color: var(--accent); }
+  #follow-up-bar { display: none; flex-wrap: wrap; gap: 8px; padding: 8px 0 2px; }
 
   /* TYPING */
   .typing-row { display: flex; gap: 9px; align-items: center; }
@@ -544,6 +544,7 @@
           <input class="ai-input" id="ai-input" placeholder="Ask something else…" onkeydown="handleKey(event)" />
           <button class="ai-send" onclick="sendMessage()">➤</button>
         </div>
+        <div id="follow-up-bar"></div>
         <div class="ai-powered">AI may make mistakes. For urgent issues, <a href="#">contact support</a>.</div>
       </div>
     </div>
@@ -802,6 +803,7 @@
     document.getElementById('ai-minimized').classList.add('hidden');
     document.getElementById('article-scroll-area').classList.add('panel-open');
 
+    clearFollowUpBar();
     const body = document.getElementById('ai-panel-body');
     body.innerHTML = '';
 
@@ -832,13 +834,21 @@
     const text = input.value.trim();
     if (!text) return;
     input.value = '';
+    clearFollowUpBar();
     const body = document.getElementById('ai-panel-body');
     deliver(currentArticle + '_freeform', text, body);
+  }
+
+  function clearFollowUpBar() {
+    const bar = document.getElementById('follow-up-bar');
+    bar.innerHTML = '';
+    bar.style.display = 'none';
   }
 
   function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
 
   function freeform(text) {
+    clearFollowUpBar();
     const body = document.getElementById('ai-panel-body');
     deliver(currentArticle + '_freeform', text, body);
   }
@@ -883,10 +893,6 @@
 
   function appendAI(paras, followUps, container) {
     const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    const fups = (followUps && followUps.length)
-      ? `<div class="follow-up-chips">${followUps.map(f =>
-          `<button class="follow-up-chip" onclick="freeform('${esc(f)}')">${f}</button>`
-        ).join('')}</div>` : '';
     const el = document.createElement('div');
     el.className = 'msg-ai';
     el.innerHTML = `
@@ -898,9 +904,18 @@
           <button class="helpful-btn">👍</button>
           <button class="helpful-btn">👎</button>
         </div>
-        ${fups}
       </div>`;
     container.appendChild(el);
+    const bar = document.getElementById('follow-up-bar');
+    if (followUps && followUps.length) {
+      bar.innerHTML = followUps.map(f =>
+        `<button class="follow-up-chip" onclick="freeform('${esc(f)}')">${f}</button>`
+      ).join('');
+      bar.style.display = 'flex';
+    } else {
+      bar.innerHTML = '';
+      bar.style.display = 'none';
+    }
   }
 
   function scrollBottom() {
